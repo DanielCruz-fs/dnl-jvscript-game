@@ -33,7 +33,12 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
         scores[activePlayer] += roundScore;
         document.querySelector('#score-' + activePlayer).innerHTML = '<p class="animated fadeInUp">' + scores[activePlayer] + '</p>';
         
-        if( scores[activePlayer] >= 20){
+        var input = document.querySelector('.final-score').value;
+        var winningScore;
+
+        input ? winningScore = input : winningScore = 100;
+
+        if( scores[activePlayer] >= winningScore){
             document.querySelector('#name-' + activePlayer).innerHTML = '<p class="animated infinite bounce delay-2s">Winner!!!</p>';
             document.querySelector('.dice').style.display = 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
