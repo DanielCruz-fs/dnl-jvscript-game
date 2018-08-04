@@ -6,37 +6,42 @@ GAME RULES:
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 */
-var scores, roundScore, activePlayer;
+var scores, roundScore, activePlayer, gamePlaying;
 init();
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
-    var dice = Math.floor( Math.random() * 6 ) + 1;
+    if(gamePlaying){
+        var dice = Math.floor( Math.random() * 6 ) + 1;
     
-    var diceDOM = document.querySelector('.dice');
-    diceDOM.style.display = 'block';
-    diceDOM.src = 'images/dice-' + dice + '.png';
-
-    document.querySelector('#name-' + activePlayer).classList.toggle('bounceIn');
-
-    if( dice !== 1){
-        roundScore += dice;
-        document.querySelector('#current-' + activePlayer).innerHTML = '<p class="animated fadeInUp">' + roundScore + '</p>';
-    }else{
-        nextPlayer();
+        var diceDOM = document.querySelector('.dice');
+        diceDOM.style.display = 'block';
+        diceDOM.src = 'images/dice-' + dice + '.png';
+    
+        document.querySelector('#name-' + activePlayer).classList.toggle('bounceIn');
+    
+        if( dice !== 1){
+            roundScore += dice;
+            document.querySelector('#current-' + activePlayer).innerHTML = '<p class="animated fadeInUp">' + roundScore + '</p>';
+        }else{
+            nextPlayer();
+        }
     }
 });
 
 document.querySelector('.btn-hold').addEventListener('click', function(){
-    scores[activePlayer] += roundScore;
-    document.querySelector('#score-' + activePlayer).innerHTML = '<p class="animated fadeInUp">' + scores[activePlayer] + '</p>';
-    
-    if( scores[activePlayer] >= 20){
-        document.querySelector('#name-' + activePlayer).innerHTML = '<p class="animated infinite bounce delay-2s">Winner!!!</p>';
-        document.querySelector('.dice').style.display = 'none';
-        document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
-        document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-    }else{
-        nextPlayer();
+    if(gamePlaying){
+        scores[activePlayer] += roundScore;
+        document.querySelector('#score-' + activePlayer).innerHTML = '<p class="animated fadeInUp">' + scores[activePlayer] + '</p>';
+        
+        if( scores[activePlayer] >= 20){
+            document.querySelector('#name-' + activePlayer).innerHTML = '<p class="animated infinite bounce delay-2s">Winner!!!</p>';
+            document.querySelector('.dice').style.display = 'none';
+            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+            document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+            gamePlaying = false;
+        }else{
+            nextPlayer();
+        }
     }
 });
 
@@ -58,6 +63,7 @@ function init(){
     scores = [0, 0];
     roundScore = 0;
     activePlayer = 0;
+    gamePlaying = true;
 
     document.querySelector('.dice').style.display = 'none';
 
